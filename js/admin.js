@@ -9,8 +9,8 @@ let currentFilter = "all";
 let searchQuery = "";
 let isSignUpMode = false;
 let supabaseClient = null;
-let currentUserId = null;
-let isLoadingReservations = false;
+let hasLoadedReservations = false;
+let isLoading = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   initAuthToggle();
@@ -37,34 +37,26 @@ async function checkAuthState() {
   }
 
   try {
+    // Single shared client
     supabaseClient = await getSupabaseClient();
 
-    // Check existing session on page load
-    const { data: { session } } = await supabaseClient.auth.getSession();
-
-    if (session?.user) {
-      currentUserId = session.user.id;
-      showDashboardView(session.user);
-    } else {
-      currentUserId = null;
-      showAuthView();
-    }
-
-    // Subscribe to auth state updates (e.g. login/logout events)
+    // Listen to auth state updates
     supabaseClient.auth.onAuthStateChange((event, session) => {
+      console.log("Supabase Auth Event:", event);
       if (session?.user) {
-        // Only re-render if it is a genuinely different user session
-        if (currentUserId !== session.user.id) {
-          currentUserId = session.user.id;
-          showDashboardView(session.user);
-        }
+        showDashboardView(session.user);
       } else {
-        if (currentUserId !== null) {
-          currentUserId = null;
-          showAuthView();
-        }
+        showAuthView();
       }
     });
+
+    // Initial session check
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session?.user) {
+      showDashboardView(session.user);
+    } else {
+      showAuthView();
+    }
   } catch (err) {
     console.error("Auth check failed:", err);
     showAuthView();
@@ -121,31 +113,28 @@ function initAuthForm() {
 
     try {
       if (!isSupabaseConfigured()) {
-        // Fallback demo authentication
         const mockUser = { email, id: "demo-user-123" };
         localStorage.setItem("laura_demo_session", JSON.stringify(mockUser));
-        showToast("Demo Mode", `Logged in as ${email}. (Connect Supabase for live cloud authentication)`, "success");
+        showToast("Demo Mode", `Logged in as ${email}.`, "success");
         showDashboardView(mockUser);
         return;
       }
 
-      const client = await getSupabaseClient();
+      const client = supabaseClient || await getSupabaseClient();
 
       if (isSignUpMode) {
-        // Sign Up with Supabase Auth
         const { data, error } = await client.auth.signUp({ email, password });
         if (error) throw error;
 
         showToast(
           "Staff Account Created!",
-          data.session ? "You are now logged in." : "Check your email to verify your account.",
+          data.session ? "You are now logged in." : "Account created. Please sign in.",
           "success"
         );
         if (data.session?.user) {
           showDashboardView(data.session.user);
         }
       } else {
-        // Sign In with Supabase Auth
         const { data, error } = await client.auth.signInWithPassword({ email, password });
         if (error) throw error;
 
@@ -185,6 +174,7 @@ function initSignOut() {
 }
 
 function showAuthView() {
+  hasLoadedReservations = false;
   document.getElementById("authView").style.display = "flex";
   document.getElementById("dashboardView").style.display = "none";
   document.getElementById("loggedInUserControls").style.display = "none";
@@ -196,15 +186,19 @@ function showDashboardView(user) {
   document.getElementById("loggedInUserControls").style.display = "flex";
   document.getElementById("userEmailBadge").textContent = user.email || "Staff Member";
 
-  loadReservations();
+  // Prevent multiple executions / flickering
+  if (!hasLoadedReservations) {
+    hasLoadedReservations = true;
+    loadReservations();
+  }
 }
 
 // ==============================================================================
 // 4. FETCH RESERVATIONS & METRICS
 // ==============================================================================
 async function loadReservations() {
-  if (isLoadingReservations) return;
-  isLoadingReservations = true;
+  if (isLoading) return;
+  isLoading = true;
 
   const tableBody = document.getElementById("reservationsTableBody");
   tableBody.innerHTML = `
@@ -218,40 +212,9 @@ async function loadReservations() {
 
   try {
     if (!isSupabaseConfigured()) {
-      // Load demo reservations from local storage
       allReservations = JSON.parse(localStorage.getItem("laura_demo_reservations") || "[]");
-      if (allReservations.length === 0) {
-        // Seed default preview records
-        allReservations = [
-          {
-            id: "sample-1",
-            customer_name: "Eleanor Vance",
-            customer_phone: "+1 (415) 345-9876",
-            customer_email: "eleanor@example.com",
-            booking_date: new Date().toISOString().split("T")[0],
-            booking_time: "7:30 PM",
-            guests: 2,
-            occasion: "Romantic Date Night",
-            special_requests: "Candlelit booth, quiet corner",
-            status: "confirmed"
-          },
-          {
-            id: "sample-2",
-            customer_name: "Arthur Pendelton",
-            customer_phone: "+1 (415) 876-1234",
-            customer_email: "arthur@example.com",
-            booking_date: new Date().toISOString().split("T")[0],
-            booking_time: "8:00 PM",
-            guests: 4,
-            occasion: "Birthday Celebration",
-            special_requests: "Pre-order champagne tableside",
-            status: "pending"
-          }
-        ];
-        localStorage.setItem("laura_demo_reservations", JSON.stringify(allReservations));
-      }
     } else {
-      const client = await getSupabaseClient();
+      const client = supabaseClient || await getSupabaseClient();
       const { data, error } = await client
         .from("reservations")
         .select("*")
@@ -275,7 +238,7 @@ async function loadReservations() {
       </tr>
     `;
   } finally {
-    isLoadingReservations = false;
+    isLoading = false;
   }
 }
 
@@ -299,7 +262,6 @@ function updateMetrics(list) {
 function renderTable() {
   const tableBody = document.getElementById("reservationsTableBody");
 
-  // Filter & Search
   const filtered = allReservations.filter(res => {
     const matchesFilter = currentFilter === "all" || res.status === currentFilter;
     const nameMatch = res.customer_name?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -360,7 +322,6 @@ function renderTable() {
 }
 
 function attachRowEventListeners() {
-  // Status select changes
   document.querySelectorAll(".status-change-select").forEach(select => {
     select.addEventListener("change", async (e) => {
       const id = e.target.getAttribute("data-id");
@@ -369,7 +330,6 @@ function attachRowEventListeners() {
     });
   });
 
-  // Delete reservation
   document.querySelectorAll(".btn-delete-row").forEach(btn => {
     btn.addEventListener("click", async (e) => {
       const id = btn.getAttribute("data-id");
@@ -384,14 +344,13 @@ async function updateReservationStatus(id, newStatus) {
   try {
     if (!isSupabaseConfigured()) {
       allReservations = allReservations.map(r => r.id === id ? { ...r, status: newStatus } : r);
-      localStorage.setItem("laura_demo_reservations", JSON.stringify(allReservations));
       updateMetrics(allReservations);
       renderTable();
       showToast("Updated", `Reservation marked as ${newStatus}.`, "success");
       return;
     }
 
-    const client = await getSupabaseClient();
+    const client = supabaseClient || await getSupabaseClient();
     const { error } = await client
       .from("reservations")
       .update({ status: newStatus })
@@ -411,14 +370,13 @@ async function deleteReservation(id) {
   try {
     if (!isSupabaseConfigured()) {
       allReservations = allReservations.filter(r => r.id !== id);
-      localStorage.setItem("laura_demo_reservations", JSON.stringify(allReservations));
       updateMetrics(allReservations);
       renderTable();
       showToast("Deleted", "Reservation removed.", "success");
       return;
     }
 
-    const client = await getSupabaseClient();
+    const client = supabaseClient || await getSupabaseClient();
     const { error } = await client
       .from("reservations")
       .delete()
@@ -457,8 +415,8 @@ function initTableControls() {
   }
 
   if (refreshBtn) {
-    refreshBtn.addEventListener("click", () => {
-      loadReservations();
+    refreshBtn.addEventListener("click", async () => {
+      await loadReservations();
       showToast("Refreshed", "Reservation list refreshed from database.", "success");
     });
   }
@@ -498,4 +456,3 @@ function showToast(title, message, type = "success") {
     setTimeout(() => toast.remove(), 400);
   }, 4500);
 }
-
