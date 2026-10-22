@@ -3,13 +3,14 @@
 // ==============================================================================
 
 import { getSupabaseClient, isSupabaseConfigured } from "./supabase.js";
-import { showToast } from "./app.js";
 
 let allReservations = [];
 let currentFilter = "all";
 let searchQuery = "";
 let isSignUpMode = false;
 let supabaseClient = null;
+let currentUserId = null;
+let isLoadingReservations = false;
 
 document.addEventListener("DOMContentLoaded", async () => {
   initAuthToggle();
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ==============================================================================
 async function checkAuthState() {
   if (!isSupabaseConfigured()) {
-    console.info("Supabase is in demo mode. Check if demo session is active.");
+    console.info("Supabase is in demo mode.");
     const demoUser = localStorage.getItem("laura_demo_session");
     if (demoUser) {
       showDashboardView(JSON.parse(demoUser));
@@ -38,21 +39,30 @@ async function checkAuthState() {
   try {
     supabaseClient = await getSupabaseClient();
 
-    // Check existing session
+    // Check existing session on page load
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (session?.user) {
+      currentUserId = session.user.id;
       showDashboardView(session.user);
     } else {
+      currentUserId = null;
       showAuthView();
     }
 
-    // Subscribe to auth state updates
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
+    // Subscribe to auth state updates (e.g. login/logout events)
+    supabaseClient.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        showDashboardView(session.user);
+        // Only re-render if it is a genuinely different user session
+        if (currentUserId !== session.user.id) {
+          currentUserId = session.user.id;
+          showDashboardView(session.user);
+        }
       } else {
-        showAuthView();
+        if (currentUserId !== null) {
+          currentUserId = null;
+          showAuthView();
+        }
       }
     });
   } catch (err) {
@@ -193,6 +203,9 @@ function showDashboardView(user) {
 // 4. FETCH RESERVATIONS & METRICS
 // ==============================================================================
 async function loadReservations() {
+  if (isLoadingReservations) return;
+  isLoadingReservations = true;
+
   const tableBody = document.getElementById("reservationsTableBody");
   tableBody.innerHTML = `
     <tr>
@@ -261,6 +274,8 @@ async function loadReservations() {
         </td>
       </tr>
     `;
+  } finally {
+    isLoadingReservations = false;
   }
 }
 
@@ -458,3 +473,29 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+function showToast(title, message, type = "success") {
+  const container = document.getElementById("toastContainer");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  const icon = type === "success" ? "✓" : "⚠";
+
+  toast.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <div class="toast-content">
+      <strong>${escapeHtml(title)}</strong>
+      <p>${escapeHtml(message)}</p>
+    </div>
+  `;
+
+  container.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add("show"));
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 400);
+  }, 4500);
+}
+

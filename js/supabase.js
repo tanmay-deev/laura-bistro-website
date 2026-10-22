@@ -28,15 +28,28 @@ export const isSupabaseConfigured = () => {
          !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_PUBLIC_KEY");
 };
 
-// Asynchronously initialize and export the Supabase client
+let clientInstance = null;
+
+// Asynchronously initialize and export the singleton Supabase client
 export const getSupabaseClient = async () => {
+  if (clientInstance) {
+    return clientInstance;
+  }
+
   if (!isSupabaseConfigured()) {
     console.warn(
-      "Supabase credentials not yet configured! Please update `js/supabase.js` or set them via the prompt."
+      "Supabase credentials not yet configured! Please update `js/supabase.js`."
     );
   }
 
   // Import the latest Supabase JS client from esm.sh CDN
   const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2");
-  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  clientInstance = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true
+    }
+  });
+
+  return clientInstance;
 };
