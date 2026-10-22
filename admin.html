@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Portal &amp; Reservations — L'Aura Bistro</title>
+  
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔒</text></svg>">
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="css/style.css" /> <!-- for toast component -->
+</head>
+<body>
+
+  <!-- ==========================================================================
+       ADMIN HEADER
+       ========================================================================== -->
+  <header class="admin-header">
+    <div class="header-container">
+      <div class="admin-brand">
+        <a href="index.html" style="display:flex; align-items:center; gap:8px;">
+          <span style="color:var(--accent-gold);">✦</span>
+          <span>L'Aura</span>
+        </a>
+        <span class="admin-badge">Staff Management</span>
+      </div>
+
+      <div class="header-user-actions">
+        <a href="index.html" class="btn-secondary">← Back to Website</a>
+        
+        <!-- Active User info (shown only when logged in) -->
+        <div id="loggedInUserControls" style="display: none; align-items: center; gap: 12px;">
+          <span id="userEmailBadge" style="font-size: 0.82rem; color: var(--accent-gold-light);"></span>
+          <button id="signOutBtn" class="btn-secondary" style="border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       VIEW 1: AUTHENTICATION (SIGN IN / SIGN UP)
+       ========================================================================== -->
+  <main id="authView" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-card-head">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🍷</div>
+        <h2 id="authTitle">Staff Sign In</h2>
+        <p id="authSubtitle">Enter your Supabase staff credentials to access the table reservations console.</p>
+      </div>
+
+      <form id="authForm">
+        <div class="form-group">
+          <label for="authEmail" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="authEmail" 
+            class="form-input" 
+            placeholder="staff@laurabistro.com" 
+            required 
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="authPassword" class="form-label">Password</label>
+          <input 
+            type="password" 
+            id="authPassword" 
+            class="form-input" 
+            placeholder="••••••••••••" 
+            required 
+            autocomplete="current-password"
+            minlength="6"
+          />
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="btn-gold" style="margin-top: 10px;">
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-toggle-note">
+        <span id="authTogglePrompt">Need a new staff account?</span>
+        <button type="button" id="authToggleBtn">Create an account</button>
+      </div>
+
+      <div class="auth-tip">
+        <strong>💡 Supabase Auth Guide:</strong>
+        <p style="margin-top: 4px;">
+          This dashboard uses <strong>Supabase Authentication</strong>. You can sign up a new account right here or create a staff user directly inside your <em>Supabase Dashboard → Authentication → Users</em> tab!
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       VIEW 2: RESERVATIONS DASHBOARD (LOGGED IN)
+       ========================================================================== -->
+  <main id="dashboardView" class="dashboard-wrapper" style="display: none;">
+    <!-- Metrics Row -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon">📋</div>
+        <div class="metric-content">
+          <strong id="metricTotal">0</strong>
+          <span>Total Reservations</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon">📅</div>
+        <div class="metric-content">
+          <strong id="metricToday">0</strong>
+          <span>Today's Service</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon" style="color: var(--status-pending);">⏳</div>
+        <div class="metric-content">
+          <strong id="metricPending" style="color: var(--status-pending);">0</strong>
+          <span>Pending Review</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon" style="color: var(--status-confirmed);">✓</div>
+        <div class="metric-content">
+          <strong id="metricConfirmed" style="color: var(--status-confirmed);">0</strong>
+          <span>Confirmed Tables</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by guest name or phone number..." />
+      </div>
+
+      <div class="filter-actions">
+        <select id="statusFilter" class="filter-select">
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending Only</option>
+          <option value="confirmed">Confirmed Only</option>
+          <option value="cancelled">Cancelled Only</option>
+        </select>
+
+        <button id="refreshBtn" class="btn-secondary" title="Refresh Table Data">
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="reservations-table">
+          <thead>
+            <tr>
+              <th>Guest Details</th>
+              <th>Date &amp; Time</th>
+              <th>Guests</th>
+              <th>Occasion</th>
+              <th>Special Requests</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reservationsTableBody">
+            <!-- Dynamically populated via js/admin.js -->
+            <tr>
+              <td colspan="7" class="empty-state">
+                <div class="empty-state-icon">⏳</div>
+                <p>Loading reservations from Supabase...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Admin JavaScript Module -->
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

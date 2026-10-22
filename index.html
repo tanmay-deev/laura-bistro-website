@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="L'Aura Bistro & Bar — An exquisite culinary sanctuary featuring woodfired gastronomy, artisan botanicals, and warm modern hospitality." />
+  <title>L'Aura Bistro & Bar — Contemporary Woodfire & Dining</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍷</text></svg>">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== -->
+  <header class="header">
+    <div class="container nav-wrapper">
+      <a href="#home" class="brand-logo" aria-label="L'Aura Bistro & Bar Home">
+        <span class="brand-emblem">✦</span>
+        <span>L'Aura</span>
+      </a>
+
+      <nav class="nav-menu" id="navMenu" aria-label="Main Navigation">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#menu" class="nav-link">Curated Menu</a>
+        <a href="#story" class="nav-link">Our Philosophy</a>
+        <a href="#experience" class="nav-link">The Experience</a>
+        <a href="#reservation" class="nav-link">Reservations</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="admin.html" class="staff-link" title="Staff Portal for managing reservations">
+          <span>🔒</span> Staff Portal
+        </a>
+        <a href="#reservation" class="btn btn-primary">Book a Table</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          ☰
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       MAIN CONTENT
+       ========================================================================== -->
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+      <div class="hero-glow-orb"></div>
+      <div class="container hero-grid">
+        <div class="hero-content reveal">
+          <div class="eyebrow">Artisan Woodfire &amp; Cellar</div>
+          <h1>Gastronomy forged in <span class="gold">fire</span> &amp; passion.</h1>
+          <p class="hero-desc">
+            Immerse yourself in sensory dining. Savor seasonal ingredients kissed by woodfire, paired with rare vintage selections in an atmosphere of refined warmth.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#reservation" class="btn btn-primary">Reserve Your Table <span>↗</span></a>
+            <a href="#menu" class="btn btn-outline">Explore Menu</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-num">4.9★</span>
+              <span class="stat-label">Michelin Guide Recommended</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">100%</span>
+              <span class="stat-label">Organic Farm Sourced</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">350+</span>
+              <span class="stat-label">Cellar Selections</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal delay-1">
+          <div class="hero-image-wrapper">
+            <img 
+              src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=85" 
+              alt="Prime Woodfired Ribeye with artisanal rosemary glaze"
+              loading="eager"
+            />
+          </div>
+          <div class="hero-floating-card">
+            <div class="floating-icon">🕯️</div>
+            <div class="floating-text">
+              <strong>Atmospheric Evenings</strong>
+              <span>Live acoustic jazz every Friday &amp; Saturday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST STRIP -->
+    <div class="trust-strip">
+      <div class="container trust-grid">
+        <div class="trust-item">
+          <span class="trust-icon">✦</span>
+          <span><strong>Heirloom Ingredients</strong> sourced daily</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🔥</span>
+          <span><strong>Alder &amp; Oak Woodfire</strong> hearth kitchen</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🍷</span>
+          <span><strong>Master Sommelier</strong> guided pairings</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">✨</span>
+          <span><strong>Intimate Table Service</strong> tailored to you</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CURATED MENU SECTION -->
+    <section class="section" id="menu">
+      <div class="container">
+        <div class="text-center reveal">
+          <div class="eyebrow">Culinary Masterpieces</div>
+          <h2 class="section-title">Crafted for the <em>Connoisseur</em></h2>
+          <p class="section-desc">Each plate harmonizes time-honored Mediterranean woodfire technique with modern culinary artistry.</p>
+        </div>
+
+        <!-- Menu Filter Tabs -->
+        <div class="menu-filter-bar reveal delay-1">
+          <button class="filter-btn active" data-category="all">Full Selection</button>
+          <button class="filter-btn" data-category="mains">Woodfire Mains</button>
+          <button class="filter-btn" data-category="starters">Botanical Starters</button>
+          <button class="filter-btn" data-category="desserts">Dessert &amp; Cellar</button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid" id="menuGrid">
+          <!-- Dish 1 -->
+          <article class="dish-card reveal" data-category="mains">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80" alt="Prime Oak-Smoked Ribeye" loading="lazy">
+              <span class="dish-badge">Signature Hearth</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Oak-Smoked Ribeye</h3>
+                <span class="dish-price">$58</span>
+              </div>
+              <p class="dish-desc">45-day dry-aged Angus ribeye, truffle bone marrow emulsion, charred shallot puree, rosemary smoke.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🔥 Oak Charred</span>
+                <span>Chef's Choice</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Dish 2 -->
+          <article class="dish-card reveal delay-1" data-category="mains">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80" alt="Pan-Seared Chilean Sea Bass" loading="lazy">
+              <span class="dish-badge">Ocean Harvest</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Glazed Sea Bass</h3>
+                <span class="dish-price">$49</span>
+              </div>
+              <p class="dish-desc">Wild-caught Chilean bass, miso yuzu glaze, braised heirloom leeks, saffron dashi broth.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🌊 Sustainably Fished</span>
+                <span>Gluten-Free</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Dish 3 -->
+          <article class="dish-card reveal delay-2" data-category="starters">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=800&q=80" alt="Truffled Wild Mushroom Tagliatelle" loading="lazy">
+              <span class="dish-badge">Artisan Pasta</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Black Truffle Tagliatelle</h3>
+                <span class="dish-price">$36</span>
+              </div>
+              <p class="dish-desc">Handcrafted pasta, foraged forest chanterelles, 36-month Parmigiano-Reggiano, Perigord truffle.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🌱 Vegetarian</span>
+                <span>Housemade</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Dish 4 -->
+          <article class="dish-card reveal" data-category="starters">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80" alt="Burrata & Heirloom Fig Carpaccio" loading="lazy">
+              <span class="dish-badge">Botanical Garden</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Pugliese Burrata &amp; Fig</h3>
+                <span class="dish-price">$26</span>
+              </div>
+              <p class="dish-desc">Creamy artisan burrata, flame-torched Black Mission figs, 25-yr Modena balsamic, toasted pine nuts.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🧀 Fresh Cream</span>
+                <span>Seasonal</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Dish 5 -->
+          <article class="dish-card reveal delay-1" data-category="desserts">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=800&q=80" alt="Smoked Valrhona Chocolate Sphere" loading="lazy">
+              <span class="dish-badge">Grand Finale</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Valrhona Smoked Dome</h3>
+                <span class="dish-price">$22</span>
+              </div>
+              <p class="dish-desc">70% dark chocolate sphere melted tableside with hot Bourbon caramel, hazelnut praline crunch.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🍫 Tableside Pour</span>
+                <span>House Favorite</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Dish 6 -->
+          <article class="dish-card reveal delay-2" data-category="desserts">
+            <div class="dish-image-wrap">
+              <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80" alt="Smoked Rosemary Old Fashioned" loading="lazy">
+              <span class="dish-badge">Botanical Bar</span>
+            </div>
+            <div class="dish-body">
+              <div class="dish-header">
+                <h3 class="dish-title">Cask &amp; Botanicals</h3>
+                <span class="dish-price">$24</span>
+              </div>
+              <p class="dish-desc">Small-batch rye whiskey, smoked rosemary infusion, blood orange bitters, hand-carved clear ice sphere.</p>
+              <div class="dish-meta">
+                <span class="dietary-tag">🍸 Bar Craft</span>
+                <span>Aged 12 Yrs</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY & PHILOSOPHY SECTION -->
+    <section class="section story-section" id="story">
+      <div class="container story-grid">
+        <div class="story-mosaic reveal">
+          <img class="mosaic-img-1" src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=800&q=85" alt="Chef preparing hearth fire dishes" loading="lazy">
+          <div class="mosaic-col">
+            <img class="mosaic-img-2" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=85" alt="Warm ambient interior of the bistro" loading="lazy">
+            <img class="mosaic-img-3" src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=85" alt="Sommelier wine pouring" loading="lazy">
+          </div>
+        </div>
+
+        <div class="story-content reveal delay-1">
+          <div class="eyebrow">Our Philosophy</div>
+          <h2 class="section-title">Where raw element meets <em>poetic flavor</em>.</h2>
+          <p class="section-desc" style="margin-bottom: 20px;">
+            Founded by culinary artisans who believe the finest dining starts with reverence for the harvest. At L’Aura, our open hearth is the beating heart of our kitchen.
+          </p>
+          <p class="section-desc">
+            We reject rush. Every sauce is slowly simmered, every cut patiently rested, and every guest received as family. Here, dinner is not a transaction—it is an occasion.
+          </p>
+          <div class="story-quote-card">
+            "The magic of food isn't just in the palate. It is in the laughter that fills the air around a table well-shared."
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE EXPERIENCE SECTION -->
+    <section class="section" id="experience">
+      <div class="container">
+        <div class="text-center reveal">
+          <div class="eyebrow">Atmosphere &amp; Gatherings</div>
+          <h2 class="section-title">Spaces Tailored to <em>Your Occasion</em></h2>
+          <p class="section-desc">Whether marking a milestone or seeking an intimate evening for two, we create an ambiance designed to linger in memory.</p>
+        </div>
+
+        <div class="experience-grid">
+          <div class="experience-card reveal">
+            <div class="exp-icon">🕯️</div>
+            <h3>Intimate Date Evenings</h3>
+            <p>Corner booths lit by flickering candelabra, subdued acoustic melodies, and a quiet intimacy to disconnect from the world.</p>
+          </div>
+
+          <div class="experience-card reveal delay-1">
+            <div class="exp-icon">🥂</div>
+            <h3>Celebrations &amp; Milestones</h3>
+            <p>From milestone birthdays to private anniversaries, our team curates custom tasting menus with personalized wine flights.</p>
+          </div>
+
+          <div class="experience-card reveal delay-2">
+            <div class="exp-icon">🌿</div>
+            <h3>The Solarium Patio</h3>
+            <p>Al fresco dining surrounded by lush botanical greenery, outdoor heaters, and an open view of the starlit sky.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVATION BOOKING SECTION -->
+    <section class="section reservation-section" id="reservation">
+      <div class="container">
+        <div class="booking-layout">
+          <!-- Aside Info -->
+          <div class="booking-aside reveal">
+            <div>
+              <div class="eyebrow">Reserve a Table</div>
+              <h2 class="section-title">Join Us at <em>Our Hearth</em></h2>
+              <p class="section-desc">
+                Reservations are recommended, especially for weekend dining. For parties larger than 8, please contact our concierge directly.
+              </p>
+              
+              <div class="booking-info-list">
+                <div class="info-item">
+                  <div class="info-icon">📍</div>
+                  <div class="info-text">
+                    <strong>Our Location</strong>
+                    <span>428 Grand Avenue, Heritage District, San Francisco, CA</span>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-icon">⏰</div>
+                  <div class="info-text">
+                    <strong>Service Hours</strong>
+                    <span>Tue – Thu: 5:00 PM – 10:30 PM<br>Fri – Sun: 4:30 PM – 11:30 PM (Mon Closed)</span>
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-icon">📞</div>
+                  <div class="info-text">
+                    <strong>Concierge &amp; Inquiries</strong>
+                    <span>+1 (415) 890-2341 • reservations@laurabistro.com</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+              <span class="dietary-tag">🚗 Complimentary Valet Parking Available</span>
+            </div>
+          </div>
+
+          <!-- Reservation Form -->
+          <form class="booking-form reveal delay-1" id="reservationForm" novalidate>
+            <!-- Honeypot field for anti-spam (invisible to real users) -->
+            <div class="honeypot-field" aria-hidden="true">
+              <label for="website_url">Leave empty</label>
+              <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="customerName" class="form-label">Full Name <span class="req">*</span></label>
+                <input 
+                  type="text" 
+                  id="customerName" 
+                  name="customer_name" 
+                  class="form-control" 
+                  placeholder="e.g. Julian Hayes" 
+                  required 
+                  autocomplete="name"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="customerPhone" class="form-label">Phone Number <span class="req">*</span></label>
+                <input 
+                  type="tel" 
+                  id="customerPhone" 
+                  name="customer_phone" 
+                  class="form-control" 
+                  placeholder="+1 (555) 000-0000" 
+                  required 
+                  autocomplete="tel"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="customerEmail" class="form-label">Email Address (Optional)</label>
+                <input 
+                  type="email" 
+                  id="customerEmail" 
+                  name="customer_email" 
+                  class="form-control" 
+                  placeholder="julian@example.com" 
+                  autocomplete="email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="guestsCount" class="form-label">Number of Guests <span class="req">*</span></label>
+                <select id="guestsCount" name="guests" class="form-control" required>
+                  <option value="1">1 Guest (Solo Dining)</option>
+                  <option value="2" selected>2 Guests (Table for Two)</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests (Standard Booth)</option>
+                  <option value="5">5 Guests</option>
+                  <option value="6">6 Guests</option>
+                  <option value="7">7 Guests</option>
+                  <option value="8">8 Guests (Private Bay)</option>
+                  <option value="9">9+ Guests (Concierge Arranged)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="bookingDate" class="form-label">Reservation Date <span class="req">*</span></label>
+                <input 
+                  type="date" 
+                  id="bookingDate" 
+                  name="booking_date" 
+                  class="form-control" 
+                  required 
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="bookingTime" class="form-label">Preferred Time <span class="req">*</span></label>
+                <select id="bookingTime" name="booking_time" class="form-control" required>
+                  <option value="" disabled selected>Select a dining slot</option>
+                  <optgroup label="Early Evening">
+                    <option value="5:00 PM">5:00 PM</option>
+                    <option value="5:30 PM">5:30 PM</option>
+                    <option value="6:00 PM">6:00 PM</option>
+                    <option value="6:30 PM">6:30 PM</option>
+                  </optgroup>
+                  <optgroup label="Prime Dining">
+                    <option value="7:00 PM">7:00 PM</option>
+                    <option value="7:30 PM">7:30 PM</option>
+                    <option value="8:00 PM">8:00 PM</option>
+                    <option value="8:30 PM">8:30 PM</option>
+                  </optgroup>
+                  <optgroup label="Late Supper">
+                    <option value="9:00 PM">9:00 PM</option>
+                    <option value="9:30 PM">9:30 PM</option>
+                    <option value="10:00 PM">10:00 PM</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="occasion" class="form-label">Occasion</label>
+              <select id="occasion" name="occasion" class="form-control">
+                <option value="Casual Fine Dining" selected>Casual Fine Dining</option>
+                <option value="Romantic Date Night">Romantic Date Night</option>
+                <option value="Birthday Celebration">Birthday Celebration</option>
+                <option value="Wedding Anniversary">Wedding Anniversary</option>
+                <option value="Executive Business Dinner">Executive Business Dinner</option>
+                <option value="Other Milestone">Other Milestone Celebration</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="specialRequests" class="form-label">Dietary Preferences or Special Requests (Optional)</label>
+              <textarea 
+                id="specialRequests" 
+                name="special_requests" 
+                class="form-control" 
+                placeholder="Allergies, seating preferences (booth, patio, or window), special surprises..."
+              ></textarea>
+            </div>
+
+            <button type="submit" id="submitBookingBtn" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+              <span>Confirm Reservation Request</span> <span>↗</span>
+            </button>
+
+            <p class="form-notice">
+              ✦ Your reservation will be securely stored in our Supabase database. You will receive immediate visual confirmation, and our concierge will follow up for special arrangements.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#home" class="brand-logo">
+            <span class="brand-emblem">✦</span>
+            <span>L'Aura</span>
+          </a>
+          <p>
+            An ode to hearth fire, seasonal harvest, and unhurried dining. Savor every moment surrounded by those who matter most.
+          </p>
+        </div>
+
+        <div class="footer-nav">
+          <div class="footer-col">
+            <h4>Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#menu">Our Menu</a></li>
+              <li><a href="#story">Our Philosophy</a></li>
+              <li><a href="#experience">The Experience</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Private Dining</h4>
+            <ul class="footer-links">
+              <li><a href="#reservation">Book Table</a></li>
+              <li><a href="#experience">Solarium Patio</a></li>
+              <li><a href="#experience">Tasting Cellar</a></li>
+              <li><a href="admin.html">Staff Sign-In</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Hours</h4>
+            <ul class="footer-links">
+              <li>Tue – Thu: 5pm – 10:30pm</li>
+              <li>Fri – Sat: 4:30pm – 11:30pm</li>
+              <li>Sun: 4:30pm – 10:00pm</li>
+              <li>Mon: Closed for Sourcing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; <span id="currentYear"></span> L'Aura Bistro &amp; Bar. All rights reserved.</div>
+        <div>Engineered with HTML, CSS, JavaScript &amp; Supabase.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Main JavaScript App -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
